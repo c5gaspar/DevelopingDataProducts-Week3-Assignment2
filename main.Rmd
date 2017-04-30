@@ -1,0 +1,32 @@
+```{r setup, include=F, echo=F, message=F, warning=F}
+require(knitr); require(plotly); require(magrittr)
+```
+
+```{r initialize, echo=F, include=F, message=F, warnings=F}
+fileLocation <- "activepermits.csv"
+bpDat <- read.csv(fileLocation)
+
+bpDat$APPLICATION_DATE <- format(as.Date(bpDat$APPLICATION_DATE), "%Y")
+bpDatxYear <- aggregate(PERMIT_TYPE~APPLICATION_DATE, data=bpDat, FUN=length)
+bpDatxYear <- bpDatxYear[bpDatxYear$APPLICATION_DATE!=2017,] # Removing incomplete year
+
+```
+
+<h1> Building Permit Applications in Toronto </h1>
+<h2> Author: Connor Gaspar </h2>
+<h3> Date: `r format(Sys.Date(), "%d %b %Y")` </h3>
+
+##
+
+```{r, echo=FALSE}
+plot_ly(bpDatxYear, x=~APPLICATION_DATE, y=~PERMIT_TYPE, type='scatter', mode='lines+markers') %>%
+        layout(title="Building Permit Applications in Toronto by Year",
+               xaxis=list(title="Year of Application"),
+               yaxis=list(title="Number of Permits"))
+```
+
+##
+
+Please direct all questions to the City of Toronto
+
+##
